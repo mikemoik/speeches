@@ -1,0 +1,116 @@
+\documentclass[aspectratio=169]{beamer}
+
+% --- lualatex preamble ------------------------------------------------------
+% Unlike pdflatex, no \usepackage[utf8]{inputenc} and no \usepackage[T1]{fontenc}.
+% lualatex is Unicode-native and uses OpenType system fonts directly.
+\usepackage{fontspec}
+\usepackage{unicode-math}
+
+% --- theme -----------------------------------------------------------------
+\usetheme{metropolis}
+\usepackage{appendixnumberbeamer}
+
+% --- fonts (Fira is the metropolis house style; swap freely) ---------------
+\setsansfont{Fira Sans}
+\setmonofont{Fira Mono}
+\setmathfont{Fira Math}        % shipped by texlive-fontsextra
+
+% --- packages --------------------------------------------------------------
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}      % match the installed version
+\usepackage{minted}            % needs --shell-escape (set in latexmkrc)
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+% --- metadata --------------------------------------------------------------
+\title{My Tech Talk}
+\subtitle{A subtitle that says more}
+\author{Mike}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+% ---------------------------------------------------------------------------
+\section{Motivation}
+
+\begin{frame}{Why we care}
+  \begin{itemize}
+    \item One reason
+    \item Another reason
+    \item A third one with \alert{emphasis}
+  \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+\section{A diagram}
+
+\begin{frame}{TikZ works exactly like under pdflatex}
+  \centering
+  \begin{tikzpicture}[
+      node distance=15mm,
+      every node/.style={draw, rounded corners, minimum height=9mm, minimum width=20mm}
+    ]
+    \node (a) {Input};
+    \node[right=of a] (b) {Process};
+    \node[right=of b] (c) {Output};
+    \draw[-Latex] (a) -- (b);
+    \draw[-Latex] (b) -- (c);
+  \end{tikzpicture}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+\section{A plot}
+
+\begin{frame}{Benchmark: runtime vs.\ input size}
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+        width=0.85\textwidth, height=0.65\textheight,
+        xlabel={Input size $n$}, ylabel={Runtime (ms)},
+        xmode=log, ymode=log,
+        log basis x=10, log basis y=10,
+        grid=both, major grid style={black!15}, minor grid style={black!5},
+        legend pos=north west,
+        legend cell align=left,
+        thick,
+    ]
+      % naive: O(n^2)
+      \addplot+[mark=*] coordinates {
+        (10, 0.1) (100, 8) (1000, 750) (10000, 72000)
+      };
+      \addlegendentry{naive $\mathcal{O}(n^2)$}
+
+      % optimized: O(n log n)
+      \addplot+[mark=square*] coordinates {
+        (10, 0.3) (100, 4) (1000, 55) (10000, 720)
+      };
+      \addlegendentry{optimized $\mathcal{O}(n \log n)$}
+    \end{axis}
+  \end{tikzpicture}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+\section{Some code}
+
+% Frames containing minted/verbatim must be marked [fragile].
+\begin{frame}[fragile]{A syntax-highlighted code block}
+  \begin{minted}[fontsize=\small, bgcolor=black!5]{python}
+def greet(name: str) -> str:
+    return f"hello, {name}"
+  \end{minted}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+\begin{frame}[standout]
+  Questions?
+\end{frame}
+
+\end{document}
