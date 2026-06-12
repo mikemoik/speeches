@@ -113,11 +113,11 @@ def greet(name: str) -> str:
 
 % pdfpc-specific: \href{run:...} autostarts and loops the video in pdfpc.
 % Works only in pdfpc; other viewers treat it as a plain link.
-\begin{frame}{Perception demo}
-  \begin{center}
+\begin{frame}[plain]
+  \centerline{%
     \href{run:media/a2_perception_2.mp4?autostart\&loop}
-         {\includegraphics[height=0.95\textheight]{media/a2_perception_2_poster.jpg}}
-  \end{center}
+         {\includegraphics[height=0.95\paperheight]{media/a2_perception_2_poster.jpg}}%
+  }
 \end{frame}
 
 % ---------------------------------------------------------------------------
