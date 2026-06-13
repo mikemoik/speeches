@@ -17,7 +17,7 @@
 
 % --- packages --------------------------------------------------------------
 \usepackage{tikz}
-\usetikzlibrary{positioning, arrows.meta}
+\usetikzlibrary{positioning, arrows.meta, calc}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}      % match the installed version
 \usepackage{minted}            % needs --shell-escape (set in latexmkrc)
@@ -136,15 +136,57 @@ def greet(name: str) -> str:
 
 \begin{frame}[plain]
   \centerline{%
-    \href{run:media/motion_seg_full_fused.mp4?autostart\&loop}
-         {\includegraphics[height=0.95\paperheight]{media/motion_seg_full_fused_poster.jpg}}%
+    \href{run:media/static_dynamic.mp4?autostart\&loop}
+         {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/static_dynamic_poster.jpg}}%
   }
 \end{frame}
 
 \begin{frame}[plain]
   \centerline{%
-    \href{run:media/static_dynamic.mp4?autostart\&loop}
-         {\includegraphics[height=0.95\paperheight]{media/static_dynamic_poster.jpg}}%
+    \href{run:media/reveal_lift_return.mp4?autostart\&loop}
+         {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/reveal_lift_return_poster.jpg}}%
+  }
+\end{frame}
+
+\begin{frame}[plain]
+  % slide rtk_offset
+  \begin{tikzpicture}[remember picture, overlay]
+    % track-on-satellite image, pushed to the left edge
+    \node[anchor=west, inner sep=0] (E)
+      at ([xshift=2mm]current page.west)
+      {\includegraphics[height=0.92\paperheight]{media/kitti04_track_earth.png}};
+    % camera frame of frame 230, bottom-right
+    \node[anchor=south east, inner sep=0] (C)
+      at ([xshift=-3mm, yshift=3mm]current page.south east)
+      {\includegraphics[width=0.52\paperwidth]{media/frame_230_rgb.png}};
+    % vertical yellow line through the middle of the frame-230 image
+    \draw[yellow, line width=5pt] (C.north) -- (C.south);
+    % estimated position of track point 230 inside the earth image.
+    % (FX,FY) are fractions of the image box (0,0)=bottom-left .. (1,1)=top-right.
+    % Nudge these two numbers if the marker is off the actual point.
+    \coordinate (p230) at
+      ($($(E.south west)!0.41!(E.south east)$)!0.02!($(E.north west)!0.41!(E.north east)$)$);
+    \draw[red, very thick] (p230) circle (2.4mm);
+    \node[red, font=\footnotesize\bfseries, anchor=east, xshift=-3mm] at (p230) {230};
+    % connector linking the track point to the camera frame
+    \draw[-Latex, red, very thick]
+      (p230) .. controls +(right:18mm) and +(left:12mm) .. (C.north west);
+    % RTK accuracy note, top-right free space
+    \node[anchor=north east, inner sep=0]
+      at ([xshift=-5mm, yshift=-7mm]current page.north east)
+      {\includegraphics[width=0.5\paperwidth]{media/rtk_offset_note.png}};
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[plain]
+  \centerline{%
+    \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/kitti04_frame235.png}%
+  }
+\end{frame}
+
+\begin{frame}[plain]
+  \centerline{%
+    \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/kitti04_mymaps_layers.png}%
   }
 \end{frame}
 
