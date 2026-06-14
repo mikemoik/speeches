@@ -151,89 +151,9 @@
 \end{frame}
 
 % ---------------------------------------------------------------------------
-\section{Introduction}
-
-\begin{frame}{Idea}
-  \begin{itemize}
-    \item One reason
-    \item Another reason
-    \item A third one with \alert{emphasis}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Setting}
-  \begin{itemize}
-    \item One reason
-    \item Another reason
-    \item A third one with \alert{emphasis}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Approach}
-  \begin{itemize}
-    \item One reason
-    \item Another reason
-    \item A third one with \alert{emphasis}
-  \end{itemize}
-\end{frame}
-
-% ---------------------------------------------------------------------------
-\section{A video}
-
-% pdfpc-specific: \href{run:...} autostarts and loops the video in pdfpc.
-% Works only in pdfpc; other viewers treat it as a plain link.
-\begin{frame}[plain]
-  \centerline{%
-    \href{run:media/a2_perception_2.mp4?autostart\&loop}
-         {\includegraphics[height=0.95\paperheight]{media/a2_perception_2_poster.jpg}}%
-  }
-\end{frame}
-
-\begin{frame}[plain]
-  \centerline{%
-    \href{run:media/a4_tag_kps_class.mp4?autostart\&loop}
-         {\includegraphics[height=0.95\paperheight]{media/a4_tag_kps_class_poster.jpg}}%
-  }
-\end{frame}
-
-\begin{frame}[plain]
-  \centerline{%
-    \href{run:media/a4_tag_kps_depth.mp4?autostart\&loop}
-         {\includegraphics[height=0.95\paperheight]{media/a4_tag_kps_depth_poster.jpg}}%
-  }
-\end{frame}
-
-\begin{frame}[plain]
-  \centerline{%
-    \href{run:media/static_dynamic.mp4?autostart\&loop}
-         {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/static_dynamic_poster.jpg}}%
-  }
-\end{frame}
-
-\begin{frame}[plain]
-  \centerline{%
-    \href{run:media/reveal_lift_return.mp4?autostart\&loop}
-         {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/reveal_lift_return_poster.jpg}}%
-  }
-\end{frame}
-
-
-\begin{frame}[plain]
-  \centerline{%
-    \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/kitti04_frame235.png}%
-  }
-\end{frame}
-
-\begin{frame}[plain]
-  \centerline{%
-    \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/kitti04_mymaps_layers.png}%
-  }
-\end{frame}
-
-% ---------------------------------------------------------------------------
 % slide mapgen_workflow — ADAS map-generation pipeline
 % (figure body from aivision/docs/mapgen_workflow.tex, scaled to fit the slide)
-\begin{frame}{Map Building Workflow} % mapbuild
+\begin{frame}{HD Map Building Workflow} % mapbuild
   \centering
   \vfill
   \resizebox{\textwidth}{!}{%
@@ -282,8 +202,8 @@
   \node[box, fill=cGeo] (spattemp) at (9.2,-2.8)  {spatial\\temporal};
 
   % ---- create column: ADAS map databases, local (xyz) -> geographic via georef() ----
-  \node[db] (db1) at (13.8,0.85)  {ADAS map\\[1pt]{\ttfamily\scriptsize <xyz>}};
-  \node[db] (db2) at (13.8,-2.65) {ADAS map\\[1pt]{\ttfamily\scriptsize <lat,lon,alt>}};
+  \node[db, dashed] (db1) at (13.8,0.85)  {HD map\\[1pt]{\ttfamily\scriptsize <xyz>}};
+  \node[db] (db2) at (13.8,-2.65) {HD map\\[1pt]{\ttfamily\scriptsize <lat,lon,alt>}};
   \draw[arr] (db1.south) -- (db2.north) node[midway, glabel] {georef()};
 
   % ---- input overlays (top-left badges) on preprocessing + perception only ----
@@ -334,6 +254,57 @@
   \vfill
 \end{frame}
 
+\begin{frame}[plain]
+  \centerline{%
+    \href{run:media/a2_perception_2.mp4?autostart\&loop}
+         {\includegraphics[height=0.95\paperheight]{media/a2_perception_2_poster.jpg}}%
+  }
+\end{frame}
+
+\begin{frame}[plain]
+  \centerline{%
+    \href{run:media/a4_tag_kps_class.mp4?autostart\&loop}
+         {\includegraphics[height=0.95\paperheight]{media/a4_tag_kps_class_poster.jpg}}%
+  }
+\end{frame}
+
+\begin{frame}[plain]
+  \centerline{%
+    \href{run:media/a4_tag_kps_depth.mp4?autostart\&loop}
+         {\includegraphics[height=0.95\paperheight]{media/a4_tag_kps_depth_poster.jpg}}%
+  }
+\end{frame}
+
+\begin{frame}[plain]
+  \centerline{%
+    \href{run:media/static_dynamic.mp4?autostart\&loop}
+         {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/static_dynamic_poster.jpg}}%
+  }
+\end{frame}
+
+\begin{frame}[plain]
+  \centerline{%
+    \href{run:media/reveal_lift_return.mp4?autostart\&loop}
+         {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/reveal_lift_return_poster.jpg}}%
+  }
+\end{frame}
+
+%\begin{frame}[plain]
+%  \centerline{%
+%    \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/kitti04_frame235.png}%
+%  }
+%\end{frame}
+
+\begin{frame}{HD Map Building - {\tt georef()}} % mapbuild
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=north, inner sep=0] (H)
+      at ([yshift=-16mm]current page.north)
+      {\includegraphics[width=\paperwidth,height=0.75\paperheight,keepaspectratio]{media/kitti04_mymaps_layers.png}};
+  \end{tikzpicture}
+\end{frame}
+
+% pdfpc-specific: \href{run:...} autostarts and loops the video in pdfpc.
+% Works only in pdfpc; other viewers treat it as a plain link.
 % ---------------------------------------------------------------------------
 \begin{frame}[standout]
   Questions?
