@@ -36,7 +36,7 @@
 \usepackage{hyperref}
 
 % --- metadata --------------------------------------------------------------
-\title{Map Localization for ADAS}
+\title{HD Map Localization}
 %\subtitle{A subtitle that says more}
 \author{Michael Schweitzer}
 \date{\today}
@@ -45,14 +45,92 @@
 
 \maketitle
 
+\begin{frame}{HD Map Localization} % seq04_intro
+  % KITTI seq04 camera video (top) + IBM DOORS HD-001 (bottom-left) + requirement map (bottom-right)
+  \begin{tikzpicture}[remember picture, overlay,
+      flow/.style={-{Latex[length=3mm,width=2.4mm]}, line width=1.4pt, draw=cYes}]
+    % camera sequence video, below the title, autostart+loop
+    \node[anchor=north, inner sep=0] (V)
+      at ([yshift=-17mm]current page.north)
+      {\href{run:media/kitti04_image2.mp4?autostart\&loop}
+            {\includegraphics[width=0.86\paperwidth,height=0.32\paperheight,keepaspectratio]{media/kitti04_image2_poster.jpg}}};
+    % additional sensor data, drawn as a stack of cards (top-right input)
+    \node[draw=black!55, fill=cInput, rounded corners=2pt, line width=.6pt, anchor=north east,
+          align=left, inner sep=3pt, font=\footnotesize, text=black!85] (S)
+      at ([xshift=-7mm, yshift=-19mm]current page.north east)
+      {\textbf{sensor data}\\[1pt]EGO\\IMU\\Stereo\\\ldots};
+    \begin{scope}[on background layer]
+      \draw[draw=black!50, fill=cInput!60, rounded corners=2pt, line width=.6pt]
+        ([xshift=2.6mm,yshift=2.6mm]S.south west) rectangle ([xshift=2.6mm,yshift=2.6mm]S.north east);
+      \draw[draw=black!50, fill=cInput!80, rounded corners=2pt, line width=.6pt]
+        ([xshift=1.3mm,yshift=1.3mm]S.south west) rectangle ([xshift=1.3mm,yshift=1.3mm]S.north east);
+    \end{scope}
+    % IBM DOORS requirement HD-001, bottom-left
+    \node[anchor=south west, inner sep=0] (D)
+      at ([xshift=5mm, yshift=5mm]current page.south west)
+      {\includegraphics[width=0.46\paperwidth]{media/doors_hd001.png}};
+    % requirement map, bottom-right
+    \node[anchor=south east, inner sep=0] (M)
+      at ([xshift=-5mm, yshift=5mm]current page.south east)
+      {\includegraphics[height=0.36\paperheight]{media/req_map.png}};
+    % boxed label on the map (top-right corner, clear of the arrow convergence)
+    \node[draw=black!55, fill=white, rounded corners=2pt, line width=.6pt,
+          font=\footnotesize\bfseries, text=black!85, inner sep=2.5pt, anchor=north east]
+      at ([xshift=-2mm, yshift=-2mm]M.north east) {HD Map};
+    % shared attachment point: on the red track, ~1/3 down from its top (FX,FY of the map image)
+    \coordinate (hp) at
+      ($($(M.south west)!0.383!(M.south east)$)!0.668!($(M.north west)!0.383!(M.north east)$)$);
+    % green straight arrows, all sharing that point on the red track
+    \draw[flow] (V.south) -- (hp);
+    \draw[flow] (D.east)  -- (hp);
+    \draw[flow] (S.south) -- (hp);
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[plain]
+  % slide rtk_offset
+  \begin{tikzpicture}[remember picture, overlay]
+    % track-on-satellite image, pushed to the left edge
+    \node[anchor=west, inner sep=0] (E)
+      at ([xshift=2mm]current page.west)
+      {\includegraphics[height=0.92\paperheight]{media/kitti04_track_earth.png}};
+    % camera frame of frame 230, bottom-right
+    \node[anchor=south east, inner sep=0] (C)
+      at ([xshift=-3mm, yshift=3mm]current page.south east)
+      {\includegraphics[width=0.52\paperwidth]{media/frame_230_rgb.png}};
+    % vertical yellow line through the middle of the frame-230 image
+    \draw[yellow, line width=5pt] (C.north) -- (C.south);
+    % estimated position of track point 230 inside the earth image.
+    % (FX,FY) are fractions of the image box (0,0)=bottom-left .. (1,1)=top-right.
+    % Nudge these two numbers if the marker is off the actual point.
+    \coordinate (p230) at
+      ($($(E.south west)!0.41!(E.south east)$)!0.02!($(E.north west)!0.41!(E.north east)$)$);
+    \draw[red, very thick] (p230) circle (2.4mm);
+    \node[red, font=\footnotesize\bfseries, anchor=east, xshift=-3mm] at (p230) {230};
+    % connector linking the track point to the camera frame
+    \draw[-Latex, red, very thick]
+      (p230) .. controls +(right:18mm) and +(left:12mm) .. (C.north west);
+    % three text-window notes, stacked in the right column above the camera frame
+    \node[anchor=north east, inner sep=0] (N1)
+      at ([xshift=-5mm, yshift=-5mm]current page.north east)
+      {\includegraphics[width=0.40\paperwidth]{media/rtk_offset_note.png}};
+    \node[anchor=north east, inner sep=0] (N2)
+      at ([yshift=-2mm]N1.south east)
+      {\includegraphics[width=0.40\paperwidth]{media/rtk_drift_note.png}};
+    \node[anchor=north east, inner sep=0] (N3)
+      at ([yshift=-2mm]N2.south east)
+      {\includegraphics[width=0.40\paperwidth]{media/gps_accuracy_note.png}};
+  \end{tikzpicture}
+\end{frame}
+
 \begin{frame}{Outline}
   \tableofcontents
 \end{frame}
 
 % ---------------------------------------------------------------------------
-\section{Motivation}
+\section{Introduction}
 
-\begin{frame}{Why we care}
+\begin{frame}{Idea}
   \begin{itemize}
     \item One reason
     \item Another reason
@@ -60,63 +138,20 @@
   \end{itemize}
 \end{frame}
 
-% ---------------------------------------------------------------------------
-\section{A diagram}
-
-\begin{frame}{TikZ works exactly like under pdflatex}
-  \centering
-  \begin{tikzpicture}[
-      node distance=15mm,
-      every node/.style={draw, rounded corners, minimum height=9mm, minimum width=20mm}
-    ]
-    \node (a) {Input};
-    \node[right=of a] (b) {Process};
-    \node[right=of b] (c) {Output};
-    \draw[-Latex] (a) -- (b);
-    \draw[-Latex] (b) -- (c);
-  \end{tikzpicture}
+\begin{frame}{Setting}
+  \begin{itemize}
+    \item One reason
+    \item Another reason
+    \item A third one with \alert{emphasis}
+  \end{itemize}
 \end{frame}
 
-% ---------------------------------------------------------------------------
-\section{A plot}
-
-\begin{frame}{Benchmark: runtime vs.\ input size}
-  \centering
-  \begin{tikzpicture}
-    \begin{axis}[
-        width=0.85\textwidth, height=0.65\textheight,
-        xlabel={Input size $n$}, ylabel={Runtime (ms)},
-        xmode=log, ymode=log,
-        log basis x=10, log basis y=10,
-        grid=both, major grid style={black!15}, minor grid style={black!5},
-        legend pos=north west,
-        legend cell align=left,
-        thick,
-    ]
-      % naive: O(n^2)
-      \addplot+[mark=*] coordinates {
-        (10, 0.1) (100, 8) (1000, 750) (10000, 72000)
-      };
-      \addlegendentry{naive $\mathcal{O}(n^2)$}
-
-      % optimized: O(n log n)
-      \addplot+[mark=square*] coordinates {
-        (10, 0.3) (100, 4) (1000, 55) (10000, 720)
-      };
-      \addlegendentry{optimized $\mathcal{O}(n \log n)$}
-    \end{axis}
-  \end{tikzpicture}
-\end{frame}
-
-% ---------------------------------------------------------------------------
-\section{Some code}
-
-% Frames containing minted/verbatim must be marked [fragile].
-\begin{frame}[fragile]{A syntax-highlighted code block}
-  \begin{minted}[fontsize=\small, bgcolor=black!5]{python}
-def greet(name: str) -> str:
-    return f"hello, {name}"
-  \end{minted}
+\begin{frame}{Approach}
+  \begin{itemize}
+    \item One reason
+    \item Another reason
+    \item A third one with \alert{emphasis}
+  \end{itemize}
 \end{frame}
 
 % ---------------------------------------------------------------------------
@@ -159,41 +194,6 @@ def greet(name: str) -> str:
   }
 \end{frame}
 
-\begin{frame}[plain]
-  % slide rtk_offset
-  \begin{tikzpicture}[remember picture, overlay]
-    % track-on-satellite image, pushed to the left edge
-    \node[anchor=west, inner sep=0] (E)
-      at ([xshift=2mm]current page.west)
-      {\includegraphics[height=0.92\paperheight]{media/kitti04_track_earth.png}};
-    % camera frame of frame 230, bottom-right
-    \node[anchor=south east, inner sep=0] (C)
-      at ([xshift=-3mm, yshift=3mm]current page.south east)
-      {\includegraphics[width=0.52\paperwidth]{media/frame_230_rgb.png}};
-    % vertical yellow line through the middle of the frame-230 image
-    \draw[yellow, line width=5pt] (C.north) -- (C.south);
-    % estimated position of track point 230 inside the earth image.
-    % (FX,FY) are fractions of the image box (0,0)=bottom-left .. (1,1)=top-right.
-    % Nudge these two numbers if the marker is off the actual point.
-    \coordinate (p230) at
-      ($($(E.south west)!0.41!(E.south east)$)!0.02!($(E.north west)!0.41!(E.north east)$)$);
-    \draw[red, very thick] (p230) circle (2.4mm);
-    \node[red, font=\footnotesize\bfseries, anchor=east, xshift=-3mm] at (p230) {230};
-    % connector linking the track point to the camera frame
-    \draw[-Latex, red, very thick]
-      (p230) .. controls +(right:18mm) and +(left:12mm) .. (C.north west);
-    % three text-window notes, stacked in the right column above the camera frame
-    \node[anchor=north east, inner sep=0] (N1)
-      at ([xshift=-5mm, yshift=-5mm]current page.north east)
-      {\includegraphics[width=0.40\paperwidth]{media/rtk_offset_note.png}};
-    \node[anchor=north east, inner sep=0] (N2)
-      at ([yshift=-2mm]N1.south east)
-      {\includegraphics[width=0.40\paperwidth]{media/rtk_drift_note.png}};
-    \node[anchor=north east, inner sep=0] (N3)
-      at ([yshift=-2mm]N2.south east)
-      {\includegraphics[width=0.40\paperwidth]{media/gps_accuracy_note.png}};
-  \end{tikzpicture}
-\end{frame}
 
 \begin{frame}[plain]
   \centerline{%
