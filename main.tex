@@ -171,14 +171,16 @@ def greet(name: str) -> str:
     % connector linking the track point to the camera frame
     \draw[-Latex, red, very thick]
       (p230) .. controls +(right:18mm) and +(left:12mm) .. (C.north west);
-    % RTK accuracy note, top-right free space
-    \node[anchor=north east, inner sep=0]
-      at ([xshift=-5mm, yshift=-7mm]current page.north east)
-      {\includegraphics[width=0.5\paperwidth]{media/rtk_offset_note.png}};
-    % continental-drift note, middle-right free space
-    \node[anchor=east, inner sep=0]
-      at ([xshift=-5mm]current page.east)
-      {\includegraphics[width=0.5\paperwidth]{media/rtk_drift_note.png}};
+    % three text-window notes, stacked in the right column above the camera frame
+    \node[anchor=north east, inner sep=0] (N1)
+      at ([xshift=-5mm, yshift=-5mm]current page.north east)
+      {\includegraphics[width=0.40\paperwidth]{media/rtk_offset_note.png}};
+    \node[anchor=north east, inner sep=0] (N2)
+      at ([yshift=-2mm]N1.south east)
+      {\includegraphics[width=0.40\paperwidth]{media/rtk_drift_note.png}};
+    \node[anchor=north east, inner sep=0] (N3)
+      at ([yshift=-2mm]N2.south east)
+      {\includegraphics[width=0.40\paperwidth]{media/gps_accuracy_note.png}};
   \end{tikzpicture}
 \end{frame}
 
