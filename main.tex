@@ -37,7 +37,7 @@
 \usepackage{hyperref}
 
 % --- metadata --------------------------------------------------------------
-\title{HD Map Localization}
+\title{HD Maps}
 %\subtitle{A subtitle that says more}
 \author{Michael Schweitzer}
 \date{\today}
@@ -45,6 +45,15 @@
 \begin{document}
 
 \maketitle
+
+% follow-up: example of a real HD map (point cloud + lane model)
+\begin{frame}{HD Maps (here)} % real_hd_map
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=north, inner sep=0] (H)
+      at ([yshift=-16mm]current page.north)
+      {\includegraphics[height=0.74\paperheight]{media/real_hd_map.png}};
+  \end{tikzpicture}
+\end{frame}
 
 \begin{frame}{HD Map Localization} % seq04_intro
   % KITTI seq04 camera video (top) + IBM DOORS HD-001 (bottom-left) + requirement map (bottom-right)
@@ -88,72 +97,21 @@
   \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{HD Map Localization - GPS is not the Solution!} % rtk
-  \begin{tikzpicture}[remember picture, overlay]
-    % track-on-satellite image, top-left, kept below the frame title
-    \node[anchor=north west, inner sep=0] (E)
-      at ([xshift=2mm, yshift=-16mm]current page.north west)
-      {\includegraphics[height=0.80\paperheight]{media/kitti04_track_earth.png}};
-    % camera frame of frame 230, bottom-right
-    \node[anchor=south east, inner sep=0] (C)
-      at ([xshift=-3mm, yshift=3mm]current page.south east)
-      {\includegraphics[width=0.52\paperwidth]{media/frame_230_rgb.png}};
-    % vertical yellow line through the middle of the frame-230 image
-    \draw[yellow, line width=5pt] (C.north) -- (C.south);
-    % estimated position of track point 230 inside the earth image.
-    % (FX,FY) are fractions of the image box (0,0)=bottom-left .. (1,1)=top-right.
-    \coordinate (p230) at
-      ($($(E.south west)!0.41!(E.south east)$)!0.02!($(E.north west)!0.41!(E.north east)$)$);
-    \draw[red, very thick] (p230) circle (2.4mm);
-    \node[red, font=\footnotesize\bfseries, anchor=east, xshift=-3mm] at (p230) {230};
-    % connector linking the track point to the camera frame
-    \draw[-Latex, red, very thick]
-      (p230) .. controls +(right:18mm) and +(left:12mm) .. (C.north west);
-    % three text-window notes, stacked in the right column (below the title, above the camera frame)
-    \node[anchor=north east, inner sep=0] (N1)
-      at ([xshift=-5mm, yshift=-16mm]current page.north east)
-      {\includegraphics[width=0.30\paperwidth]{media/rtk_offset_note.png}};
-    \node[anchor=north east, inner sep=0] (N2)
-      at ([yshift=-2mm]N1.south east)
-      {\includegraphics[width=0.30\paperwidth]{media/rtk_drift_note.png}};
-    \node[anchor=north east, inner sep=0] (N3)
-      at ([yshift=-2mm]N2.south east)
-      {\includegraphics[width=0.30\paperwidth]{media/gps_accuracy_note.png}};
-  \end{tikzpicture}
-\end{frame}
-
-% follow-up: example of a real HD map (point cloud + lane model)
-\begin{frame}{HD Map Localization} % real_hd_map
-  \begin{tikzpicture}[remember picture, overlay]
-    \node[anchor=north, inner sep=0] (H)
-      at ([yshift=-16mm]current page.north)
-      {\includegraphics[height=0.74\paperheight]{media/real_hd_map.png}};
-    \node[draw=black!55, fill=white, rounded corners=2pt, line width=.6pt,
-          font=\footnotesize\bfseries, text=black!85, inner sep=2.5pt, anchor=north west]
-      at ([xshift=2mm, yshift=-2mm]H.north west) {real HD Map (here)};
-  \end{tikzpicture}
-\end{frame}
-
 \begin{frame}{Outline} % outline
   % custom table of contents (do not use \tableofcontents)
   \begin{itemize}
     \item Introduction \;{\color{cYes}\ding{51}}~{\small\itshape(already done!)}
     \item HD Map Building \;{\small\itshape(prototyped)}
     \item HD Map Localization \;{\small\itshape(prototyped)}
-    \item Thoughts
+    \item Conclusion
     \item Questions
-    \item Links
-      \begin{itemize}
-        \item github code
-        \item github slides
-      \end{itemize}
   \end{itemize}
 \end{frame}
 
 % ---------------------------------------------------------------------------
 % slide mapgen_workflow — ADAS map-generation pipeline
 % (figure body from aivision/docs/mapgen_workflow.tex, scaled to fit the slide)
-\begin{frame}{HD Map Building Workflow} % mapbuild
+\begin{frame}{HD Map Building Pipeline ({\it Prototype})} % mapbuild
   \centering
   \vfill
   \resizebox{\textwidth}{!}{%
@@ -295,16 +253,64 @@
 %  }
 %\end{frame}
 
-\begin{frame}{HD Map Building - {\tt georef()}} % mapbuild
+\begin{frame}{HD Map Building - {\tt georef()}} % georef
   \begin{tikzpicture}[remember picture, overlay]
     \node[anchor=north, inner sep=0] (H)
       at ([yshift=-16mm]current page.north)
-      {\includegraphics[width=\paperwidth,height=0.75\paperheight,keepaspectratio]{media/kitti04_mymaps_layers.png}};
+      {\includegraphics[width=\paperwidth,height=0.78\paperheight,keepaspectratio]{media/kitti04_mymaps_ego.png}};
   \end{tikzpicture}
 \end{frame}
 
-% pdfpc-specific: \href{run:...} autostarts and loops the video in pdfpc.
-% Works only in pdfpc; other viewers treat it as a plain link.
+% virtual-camera render of the built HD map (seq04), autostart+loop
+\begin{frame}[plain] % virtual_camera
+  \centerline{%
+    \href{run:media/virtual_camera.mp4?autostart\&loop}
+         {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/virtual_camera_poster.jpg}}%
+  }
+\end{frame}
+
+% isometric chase render of the localization in the HD map (seq04), autostart+loop
+\begin{frame}[plain] % map_iso_chase
+  \centerline{%
+    \href{run:media/map_iso_chase.mp4?autostart\&loop}
+         {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/map_iso_chase_poster.jpg}}%
+  }
+\end{frame}
+
+% same chase render but with 10 px camera-detection noise, autostart+loop
+\begin{frame}[plain] % map_iso_chase_10px
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=center, inner sep=0] at (current page.center)
+      {\href{run:media/map_iso_chase_10px.mp4?autostart\&loop}
+            {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/map_iso_chase_10px_poster.jpg}}};
+    % info box
+    \node[draw=black!55, fill=white, rounded corners=2pt, line width=.6pt,
+          font=\bfseries, text=black!85, inner sep=4pt, anchor=north west]
+      at ([xshift=6mm, yshift=-6mm]current page.north west) {pixel noise = 10\,px};
+  \end{tikzpicture}
+\end{frame}
+
+% localization accuracy: 0 px vs 10 px camera-detection noise
+\begin{frame}{HD Map Localization -- Accuracy} % accuracy_table
+  \centering
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{lcc}
+    \toprule
+                                  & \textbf{0\,px (before)} & \textbf{10\,px (now)} \\
+    \midrule
+    ATE East/North                        & 0.255 m            & 0.589 m            \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{0.8em}
+  \[
+    \mathrm{ATE}_{EN} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}
+      \big[(E_i^{\mathrm{est}}-E_i^{\mathrm{gt}})^2 + (N_i^{\mathrm{est}}-N_i^{\mathrm{gt}})^2\big]}
+  \]
+
+  {\footnotesize ATE = Absolute Trajectory Error}
+\end{frame}
+
 % ---------------------------------------------------------------------------
 \begin{frame}[standout]
   Questions?
