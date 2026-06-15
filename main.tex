@@ -270,28 +270,28 @@
 \end{frame}
 
 % chase render with 10 px camera-detection noise, autostart+loop
-\begin{frame}[plain] % map_iso_chase_10px
+\begin{frame}{HD Map Localization ({\tt Prototype}): Factor Graph} % map_iso_chase_10px
   \begin{tikzpicture}[remember picture, overlay]
-    \node[anchor=center, inner sep=0] at (current page.center)
+    \node[yshift=-8mm,anchor=center, inner sep=0] at (current page.center)
       {\href{run:media/map_iso_chase_10px.mp4?autostart\&loop}
-            {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/map_iso_chase_10px_poster.jpg}}};
+            {\includegraphics[width=\paperwidth,height=0.75\paperheight,keepaspectratio]{media/map_iso_chase_10px_poster.jpg}}};
     % info box
     \node[draw=black!55, fill=white, rounded corners=2pt, line width=.6pt,
           font=\bfseries, text=black!85, inner sep=4pt, anchor=north west]
-      at ([xshift=6mm, yshift=-6mm]current page.north west) {pixel noise = 10\,px};
+      at ([xshift=15mm, yshift=-12mm]current page.north west) {vcam pixel noise = 10\,px};
   \end{tikzpicture}
 \end{frame}
 
 % same chase render but with 0 px camera-detection noise, autostart+loop
-\begin{frame}[plain] % map_iso_chase_0px
+\begin{frame}{HD Map Localization ({\tt Prototype}): Factor Graph} % map_iso_chase_0px
   \begin{tikzpicture}[remember picture, overlay]
-    \node[anchor=center, inner sep=0] at (current page.center)
+    \node[yshift=-8mm,anchor=center, inner sep=0] at (current page.center)
       {\href{run:media/map_iso_chase.mp4?autostart\&loop}
-            {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/map_iso_chase_poster.jpg}}};
+            {\includegraphics[width=\paperwidth,height=0.75\paperheight,keepaspectratio]{media/map_iso_chase_poster.jpg}}};
     % info box
     \node[draw=black!55, fill=white, rounded corners=2pt, line width=.6pt,
           font=\bfseries, text=black!85, inner sep=4pt, anchor=north west]
-      at ([xshift=6mm, yshift=-6mm]current page.north west) {pixel noise = 0\,px};
+      at ([xshift=15mm, yshift=-12mm]current page.north west) {vcam pixel noise = 0\,px};
   \end{tikzpicture}
 \end{frame}
 
