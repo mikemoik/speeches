@@ -101,8 +101,8 @@
   % custom table of contents (do not use \tableofcontents)
   \begin{itemize}
     \item Introduction \;{\color{cYes}\ding{51}}~{\small\itshape(already done!)}
-    \item HD Map Building \;{\small\itshape(prototyped)}
-    \item HD Map Localization \;{\small\itshape(prototyped)}
+    \item HD Map Building \;{\small\itshape(prototype)}
+    \item HD Map Localization \;{\small\itshape(prototype)}
     \item Conclusion
     \item Questions
   \end{itemize}
@@ -165,12 +165,12 @@
   \draw[arr] (db1.south) -- (db2.north) node[midway, glabel] {georef()};
 
   % ---- input overlays (top-left badges) on preprocessing + perception only ----
-  \node[inbadge] (slamin) at ([xshift=.4mm,yshift=-.4mm]slam.north west) {odometry};
-  \node[inbadge]          at ([yshift=-.4mm]slamin.south west) {cam calib};
-  \node[inbadge] (depin)  at ([xshift=.4mm,yshift=-.4mm]depth.north west) {odometry};
-  \node[inbadge]          at ([yshift=-.4mm]depin.south west) {cam calib};
-  \node[inbadge] at ([xshift=.4mm,yshift=-.4mm]seg.north west)   {odometry};
-  \node[inbadge] at ([xshift=.4mm,yshift=-.4mm]lanes.north west) {odometry};
+  %\node[inbadge] (slamin) at ([xshift=.4mm,yshift=-.4mm]slam.north west) {odometry};
+  %\node[inbadge]          at ([yshift=-.4mm]slamin.south west) {cam calib};
+  %\node[inbadge] (depin)  at ([xshift=.4mm,yshift=-.4mm]depth.north west) {odometry};
+  %\node[inbadge]          at ([yshift=-.4mm]depin.south west) {cam calib};
+  %\node[inbadge] at ([xshift=.4mm,yshift=-.4mm]seg.north west)   {odometry};
+  %\node[inbadge] at ([xshift=.4mm,yshift=-.4mm]lanes.north west) {odometry};
 
   % ---- dashed dividers between row 2 and row 3 (perception + fusion) ----
   \coordinate (rmid) at (0,-1.85);
@@ -262,22 +262,14 @@
 \end{frame}
 
 % virtual-camera render of the built HD map (seq04), autostart+loop
-\begin{frame}[plain] % virtual_camera
+\begin{frame}{HD Map Localization ({\tt Prototype}): Virtual Camera} % virtual_camera
   \centerline{%
     \href{run:media/virtual_camera.mp4?autostart\&loop}
          {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/virtual_camera_poster.jpg}}%
   }
 \end{frame}
 
-% isometric chase render of the localization in the HD map (seq04), autostart+loop
-\begin{frame}[plain] % map_iso_chase
-  \centerline{%
-    \href{run:media/map_iso_chase.mp4?autostart\&loop}
-         {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/map_iso_chase_poster.jpg}}%
-  }
-\end{frame}
-
-% same chase render but with 10 px camera-detection noise, autostart+loop
+% chase render with 10 px camera-detection noise, autostart+loop
 \begin{frame}[plain] % map_iso_chase_10px
   \begin{tikzpicture}[remember picture, overlay]
     \node[anchor=center, inner sep=0] at (current page.center)
@@ -287,6 +279,19 @@
     \node[draw=black!55, fill=white, rounded corners=2pt, line width=.6pt,
           font=\bfseries, text=black!85, inner sep=4pt, anchor=north west]
       at ([xshift=6mm, yshift=-6mm]current page.north west) {pixel noise = 10\,px};
+  \end{tikzpicture}
+\end{frame}
+
+% same chase render but with 0 px camera-detection noise, autostart+loop
+\begin{frame}[plain] % map_iso_chase_0px
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=center, inner sep=0] at (current page.center)
+      {\href{run:media/map_iso_chase.mp4?autostart\&loop}
+            {\includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{media/map_iso_chase_poster.jpg}}};
+    % info box
+    \node[draw=black!55, fill=white, rounded corners=2pt, line width=.6pt,
+          font=\bfseries, text=black!85, inner sep=4pt, anchor=north west]
+      at ([xshift=6mm, yshift=-6mm]current page.north west) {pixel noise = 0\,px};
   \end{tikzpicture}
 \end{frame}
 
@@ -309,6 +314,11 @@
   \]
 
   {\footnotesize ATE = Absolute Trajectory Error}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+\begin{frame}[standout]
+  Conclusion
 \end{frame}
 
 % ---------------------------------------------------------------------------
